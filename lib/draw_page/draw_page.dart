@@ -16,13 +16,27 @@ class _DrawPageState extends State<DrawPage> {
   List<DrawingModel> pointsHistory = List.empty(growable: true);
 
   DrawingModel? currentSketch;
-
   Color currentColor = Colors.black;
   double currentWidth = 4;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            child: const Icon(Icons.replay),
+            onPressed: (){
+              if (points.isNotEmpty && pointsHistory.isNotEmpty) {
+                setState(() {
+                  points.removeLast();
+                });
+              }
+            }
+          )
+        ],
+      ),
       body: GestureDetector(
         onPanStart: (details) {
           setState(() {
