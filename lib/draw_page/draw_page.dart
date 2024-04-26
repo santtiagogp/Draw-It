@@ -31,7 +31,7 @@ class _DrawPageState extends State<DrawPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton(
             child: const Icon(Icons.undo),
