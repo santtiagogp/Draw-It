@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -5,8 +7,6 @@ import 'package:gal/gal.dart';
 
 import '../model/drawing_model.dart';
 import 'sketcher/sketcher.dart';
-
-import 'dart:ui' as ui;
 
 class DrawPage extends StatefulWidget {
   const DrawPage({super.key});
@@ -29,11 +29,12 @@ class _DrawPageState extends State<DrawPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FloatingActionButton(
-            child: const Icon(Icons.replay),
+            child: const Icon(Icons.undo),
             onPressed: (){
               if (points.isNotEmpty && pointsHistory.isNotEmpty) {
                 setState(() {
@@ -48,6 +49,19 @@ class _DrawPageState extends State<DrawPage> {
               if (points.isNotEmpty && pointsHistory.isNotEmpty) {
                 setState(() {
                   points.clear();
+                });
+              }
+            }
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.redo),
+            onPressed: (){
+              if (points.isNotEmpty && pointsHistory.isNotEmpty) {
+                setState(() {
+                  if(points.length < pointsHistory.length) {
+                    final index = points.length;
+                    points.add(pointsHistory[index]);
+                  }
                 });
               }
             }
