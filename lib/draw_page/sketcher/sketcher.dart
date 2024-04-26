@@ -15,7 +15,7 @@ class Sketcher extends CustomPainter {
         ..color = Colors.black
         ..strokeCap = StrokeCap.round
         ..isAntiAlias = true
-        ..strokeWidth = 5;
+        ..strokeWidth = 10;
       
       for(int i = 0; i < drawingSketch.offsets.length; i++) {
         bool notLastOffset = i != drawingSketch.offsets.length - 1;
@@ -24,8 +24,6 @@ class Sketcher extends CustomPainter {
           final current = drawingSketch.offsets[i];
           final next = drawingSketch.offsets[i + 1];
           canvas.drawLine(current, next, paint);
-        } else {
-          
         }
       }
     }

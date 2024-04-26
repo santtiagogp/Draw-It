@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:gal/gal.dart';
 
 import '../model/drawing_model.dart';
 import 'sketcher/sketcher.dart';
+
+import 'dart:ui' as ui;
 
 class DrawPage extends StatefulWidget {
   const DrawPage({super.key});
@@ -19,6 +24,8 @@ class _DrawPageState extends State<DrawPage> {
   Color currentColor = Colors.black;
   double currentWidth = 4;
 
+  final GlobalKey sketchKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +40,26 @@ class _DrawPageState extends State<DrawPage> {
                   points.removeLast();
                 });
               }
+            }
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.delete),
+            onPressed: (){
+              if (points.isNotEmpty && pointsHistory.isNotEmpty) {
+                setState(() {
+                  points.clear();
+                });
+              }
+            }
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.save),
+            onPressed: () => saveSketch()
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.menu),
+            onPressed: (){
+              
             }
           )
         ],
@@ -70,14 +97,30 @@ class _DrawPageState extends State<DrawPage> {
         onPanEnd: (_) {
           currentSketch = null;
         },
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.height,
-          child: CustomPaint(
-            painter: Sketcher(points),
+        child: RepaintBoundary(
+          key: sketchKey,
+          child: Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.height,
+            child: CustomPaint(
+              painter: Sketcher(points),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> saveSketch() async {
+    RenderRepaintBoundary boundary
+      = sketchKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage(pixelRatio: 2.0);
+    ByteData byteData
+      = await image.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    DateTime date = DateTime.now();
+    date.toString();
+    await Gal.putImageBytes(pngBytes, name: 'draw-it-$date');
   }
 }
