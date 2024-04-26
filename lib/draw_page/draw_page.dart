@@ -7,6 +7,7 @@ import 'package:gal/gal.dart';
 
 import '../model/drawing_model.dart';
 import 'sketcher/sketcher.dart';
+import 'widgets/drawit_bottom_sheet.dart';
 
 class DrawPage extends StatefulWidget {
   const DrawPage({super.key});
@@ -67,13 +68,25 @@ class _DrawPageState extends State<DrawPage> {
             }
           ),
           FloatingActionButton(
-            child: const Icon(Icons.save),
+            child: const Icon(Icons.download),
             onPressed: () => saveSketch()
           ),
           FloatingActionButton(
             child: const Icon(Icons.menu),
             onPressed: (){
-              
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return DrawItBottomSheet(
+                    selectedColor: currentColor,
+                    currentWidth: currentWidth,
+                    onColorChanged: (color) =>
+                      setState(() => currentColor = color),
+                    onSliderChanged: (width)
+                      => setState(() => currentWidth = width),
+                  );
+                },
+              );
             }
           )
         ],

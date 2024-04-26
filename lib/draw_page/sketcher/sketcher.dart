@@ -12,10 +12,10 @@ class Sketcher extends CustomPainter {
 
     for (var drawingSketch in points) {
       Paint paint = Paint()
-        ..color = Colors.black
+        ..color = drawingSketch.color
         ..strokeCap = StrokeCap.round
         ..isAntiAlias = true
-        ..strokeWidth = 10;
+        ..strokeWidth = drawingSketch.width;
       
       for(int i = 0; i < drawingSketch.offsets.length; i++) {
         bool notLastOffset = i != drawingSketch.offsets.length - 1;
